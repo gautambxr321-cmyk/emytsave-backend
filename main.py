@@ -67,30 +67,51 @@ def get_info():
             info = ydl.extract_info(url, download=False)
             formats = []
             seen_heights = set()
+
             for f in info.get('formats', []):
                 height = f.get('height')
-                if f.get('vcodec') != 'none' and height and height not in seen_heights:
+                vcodec = f.get('vcodec', 'none')
+                acodec = f.get('acodec', 'none')
+                fmt_url = f.get('url', '')
+
+                if not fmt_url:
+                    continue
+
+                # Video formats (has video stream)
+                if vcodec != 'none' and height and height not in seen_heights:
                     seen_heights.add(height)
                     formats.append({
                         "format_id": f['format_id'],
                         "quality": f"{height}p",
                         "ext": f.get('ext', 'mp4'),
-                        "url": f.get('url', '')
+                        "url": fmt_url,
+                        "filesize": f.get('filesize') or f.get('filesize_approx')
                     })
-                elif f.get('acodec') != 'none' and f.get('vcodec') == 'none':
+                # Audio only formats
+                elif acodec != 'none' and vcodec == 'none':
                     formats.append({
                         "format_id": f['format_id'],
                         "quality": "audio",
                         "ext": f.get('ext', 'mp3'),
-                        "url": f.get('url', '')
+                        "url": fmt_url,
+                        "filesize": f.get('filesize') or f.get('filesize_approx')
                     })
-            formats.sort(key=lambda x: int(x['quality'].replace('p', '')) if x['quality'] != 'audio' else 0)
+
+            # Sort video formats by height
+            video_fmts = sorted(
+                [f for f in formats if f['quality'] != 'audio'],
+                key=lambda x: int(x['quality'].replace('p', ''))
+            )
+            audio_fmts = [f for f in formats if f['quality'] == 'audio']
+            formats = video_fmts + audio_fmts
+
             return jsonify({
                 "title": info.get('title'),
                 "thumbnail": info.get('thumbnail'),
                 "duration": info.get('duration'),
                 "formats": formats
             })
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
