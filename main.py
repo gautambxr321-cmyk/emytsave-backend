@@ -3,7 +3,7 @@ from flask_cors import CORS
 import yt_dlp
 import os
 
-app = Flask(__name__, static_folder='static')
+app = Flask(__name__)
 CORS(app)
 
 YOUTUBE_COOKIES = """# Netscape HTTP Cookie File
@@ -40,17 +40,14 @@ def setup_cookies():
 
 setup_cookies()
 
-# ── Serve frontend ──────────────────────────────────────────────────────────
 @app.route('/')
 def index():
     return send_from_directory('.', 'index.html')
 
-# ── API status ───────────────────────────────────────────────────────────────
 @app.route('/api')
 def home():
     return jsonify({"status": "EmYtSave API Running"})
 
-# ── Get video info + formats ─────────────────────────────────────────────────
 @app.route('/info', methods=['GET'])
 def get_info():
     url = request.args.get('url')
@@ -61,17 +58,15 @@ def get_info():
             'quiet': True,
             'no_warnings': True,
             'cookiefile': COOKIE_FILE,
-            'extractor_args': {
-                'youtube': {
-                    'player_client': ['android', 'web'],
-                }
-            },
+            'skip_download': True,
             'http_headers': {
                 'User-Agent': 'Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.91 Mobile Safari/537.36',
             }
         }
+
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
+
             formats = []
             seen_heights = set()
 
@@ -80,44 +75,46 @@ def get_info():
                 vcodec = f.get('vcodec', 'none')
                 acodec = f.get('acodec', 'none')
                 fmt_url = f.get('url', '')
+                protocol = f.get('protocol', '')
 
-                if not fmt_url:
+                # Skip manifests
+                if not fmt_url or protocol in ('m3u8', 'm3u8_native', 'dash'):
                     continue
 
                 # Video formats
                 if vcodec != 'none' and height and height not in seen_heights:
                     seen_heights.add(height)
                     formats.append({
-                        "format_id": f['format_id'],
+                        "format_id": f.get('format_id'),
                         "quality": f"{height}p",
                         "ext": f.get('ext', 'mp4'),
                         "url": fmt_url,
                         "filesize": f.get('filesize') or f.get('filesize_approx')
                     })
+
                 # Audio only
-                elif acodec != 'none' and vcodec == 'none':
+                elif vcodec == 'none' and acodec != 'none':
                     formats.append({
-                        "format_id": f['format_id'],
+                        "format_id": f.get('format_id'),
                         "quality": "audio",
-                        "ext": f.get('ext', 'mp3'),
+                        "ext": f.get('ext', 'm4a'),
                         "url": fmt_url,
                         "filesize": f.get('filesize') or f.get('filesize_approx')
                     })
 
-            # Sort video by height descending
+            # Sort video high to low
             video_fmts = sorted(
                 [f for f in formats if f['quality'] != 'audio'],
                 key=lambda x: int(x['quality'].replace('p', '')),
                 reverse=True
             )
             audio_fmts = [f for f in formats if f['quality'] == 'audio']
-            formats = video_fmts + audio_fmts
 
             return jsonify({
                 "title": info.get('title'),
                 "thumbnail": info.get('thumbnail'),
                 "duration": info.get('duration'),
-                "formats": formats
+                "formats": video_fmts + audio_fmts
             })
 
     except Exception as e:
