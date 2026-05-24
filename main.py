@@ -16,7 +16,18 @@ def get_info():
     if not url:
         return jsonify({"error": "URL required"}), 400
     try:
-        ydl_opts = {'quiet': True}
+        ydl_opts = {
+            'quiet': True,
+            'no_warnings': True,
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['android', 'web'],
+                }
+            },
+            'http_headers': {
+                'User-Agent': 'Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.91 Mobile Safari/537.36',
+            }
+        }
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
             formats = []
@@ -25,22 +36,19 @@ def get_info():
                     formats.append({
                         "format_id": f['format_id'],
                         "quality": f"{f['height']}p",
-                        "ext": f.get('ext'),
-                        "filesize": f.get('filesize'),
+                        "ext": f.get('ext','mp4'),
                         "url": f['url']
                     })
                 elif f.get('acodec') != 'none' and f.get('vcodec') == 'none':
                     formats.append({
                         "format_id": f['format_id'],
                         "quality": "audio",
-                        "ext": f.get('ext'),
-                        "filesize": f.get('filesize'),
+                        "ext": f.get('ext','mp3'),
                         "url": f['url']
                     })
             return jsonify({
                 "title": info.get('title'),
                 "thumbnail": info.get('thumbnail'),
-                "duration": info.get('duration'),
                 "formats": formats
             })
     except Exception as e:
