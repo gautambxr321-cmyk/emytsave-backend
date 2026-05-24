@@ -1,9 +1,9 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import yt_dlp
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 CORS(app)
 
 YOUTUBE_COOKIES = """# Netscape HTTP Cookie File
@@ -40,10 +40,17 @@ def setup_cookies():
 
 setup_cookies()
 
+# ── Serve frontend ──────────────────────────────────────────────────────────
 @app.route('/')
+def index():
+    return send_from_directory('.', 'index.html')
+
+# ── API status ───────────────────────────────────────────────────────────────
+@app.route('/api')
 def home():
     return jsonify({"status": "EmYtSave API Running"})
 
+# ── Get video info + formats ─────────────────────────────────────────────────
 @app.route('/info', methods=['GET'])
 def get_info():
     url = request.args.get('url')
@@ -77,7 +84,7 @@ def get_info():
                 if not fmt_url:
                     continue
 
-                # Video formats (has video stream)
+                # Video formats
                 if vcodec != 'none' and height and height not in seen_heights:
                     seen_heights.add(height)
                     formats.append({
@@ -87,7 +94,7 @@ def get_info():
                         "url": fmt_url,
                         "filesize": f.get('filesize') or f.get('filesize_approx')
                     })
-                # Audio only formats
+                # Audio only
                 elif acodec != 'none' and vcodec == 'none':
                     formats.append({
                         "format_id": f['format_id'],
@@ -97,10 +104,11 @@ def get_info():
                         "filesize": f.get('filesize') or f.get('filesize_approx')
                     })
 
-            # Sort video formats by height
+            # Sort video by height descending
             video_fmts = sorted(
                 [f for f in formats if f['quality'] != 'audio'],
-                key=lambda x: int(x['quality'].replace('p', ''))
+                key=lambda x: int(x['quality'].replace('p', '')),
+                reverse=True
             )
             audio_fmts = [f for f in formats if f['quality'] == 'audio']
             formats = video_fmts + audio_fmts
@@ -114,6 +122,7 @@ def get_info():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
