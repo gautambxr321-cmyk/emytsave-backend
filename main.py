@@ -1,7 +1,9 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, Response
 from flask_cors import CORS
 import yt_dlp
 import os
+import re
+import urllib.request
 
 app = Flask(__name__)
 CORS(app)
@@ -28,7 +30,7 @@ YOUTUBE_COOKIES = """# Netscape HTTP Cookie File
 #HttpOnly_.youtube.com	TRUE	/	TRUE	1795199769	__Secure-YNID	18.YT=txi-fjVxL7N_zQS6wOK7Ghuegs36TJPthuauJARBmDb3HVO9QL55wVjiGUc4Wn5JaYDblGrTepQJTJI_QhsW61KwDeLtcuvlpFGIsOUnF0k7ua4FOGgyziHeIyC6mVEd5agn16PTa9b9p1c6AjcIdMZiGbPILRn1D10_EsmYQkASJ_5QHEs6RDFIsAnKeAIaUv2HtGKBPW9c0AHUU1F_psh7hZVlriUw6JZ-DJNrSkSaiXtn9MLJ3jlcy7gdlr49F71GnFuvvaS8SHPz4u6-7ZFswu3fGz58PF3fLQgcWM2814r5chRPIs13ITtS4FhoKqbMxNgX-5avRCP7FNBISQ
 .youtube.com	TRUE	/	FALSE	1814207752	APISID	9L1uamWZPGeNQCby/AwkF_BL5sU8ogl8nL
 #HttpOnly_.youtube.com	TRUE	/	FALSE	1814207752	HSID	Ar7sttDsnrQxVPNtJ
-#HttpOnly_.youtube.com	TRUE	/	TRUE	1814215362	LOGIN_INFO	AFmmF2swRAIgPoS9IfF7tnq97jA50a3GYltZWJ4w_7d-2CTkgbfC2EgCIH3KStkSrR-if8W6F7krBSa3cU0ovy_5MwOXAaaydTZY:QUQ3MjNmeExjNmNFSVJkTEZMZ3gxSEhDWk5kMURsU3RoVzNjZjBSc1BtcVN5ek53ZkdmaHgtZXVJQTdFTEV6TlNJcXRfal9NMkNTRG1WcDVVVV9ySWlaWUFvRUVmeVVMN0JHbGFoSGdYTTRqRkNnUGliTTFBbWFYMEhJNy1JQmltLWFVR1NPYldQYXViN3c3OHlMalJSZU15VWVBcE50eFln
+#HttpOnly_.youtube.com	TRUE	/	TRUE	1814215362	LOGIN_INFO	AFmmF2swRAIgPoS9IfF7tnq97jA50a3GYltZWJ4w_7d-2CTkgbfC2EgCIH3KStkSrR-if8W6F7krBSa3cU0ovy_5MwOXAaaydTZY:QUQ3MjNmeExjNmNFSVJkTEZMZ3gxSEhDWk5kMURsU3RoVzNjZjBSc1BtcVN5ek53ZkdmaHgtZXVJQTdFTEV6TlNJcXRfal9NMkNTRG1WcDVVVV9ySWlaWUFvRUVmeVVMN0pHbGFoSGdYTTRqRkNnUGliTTFBbWFYMEhJNy1JQmltLWFVR1NPYldQYXViN3c3OHlMalJSZU15VWVBcE50eFln
 .youtube.com	TRUE	/	TRUE	1814218956	PREF	f6=40000000&tz=Asia.Kolkata
 .youtube.com	TRUE	/	FALSE	1779655770	ST-143rz7l	csn=1KZSLkeHbbQJrbr_&itct=CB4Q08wBGAEiEwiuq6Lu5NKUAxWfV50JHeeZHJcyBmctaGlnaMoBBOHjDts%3D
 .youtube.com	TRUE	/	FALSE	1779655770	ST-143rzdt	csn=1KZSLkeHbbQJrbr_&itct=CB0Q08wBGAIiEwiuq6Lu5NKUAxWfV50JHeeZHJcyBmctaGlnaMoBBOHjDts%3D
@@ -44,13 +46,29 @@ def setup_cookies():
 
 setup_cookies()
 
+YDL_BASE_OPTS = {
+    'quiet': True,
+    'no_warnings': True,
+    'cookiefile': COOKIE_FILE,
+    'http_headers': {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+    }
+}
+
+def safe_filename(title):
+    """Remove special chars from title for use as filename."""
+    return re.sub(r'[^\w\s-]', '', title or 'video').strip()[:60]
+
+
 @app.route('/')
 def index():
     return send_from_directory('.', 'index.html')
 
+
 @app.route('/api')
 def home():
     return jsonify({"status": "EmYtSave API Running"})
+
 
 @app.route('/info', methods=['GET'])
 def get_info():
@@ -58,15 +76,7 @@ def get_info():
     if not url:
         return jsonify({"error": "URL required"}), 400
     try:
-        ydl_opts = {
-            'quiet': True,
-            'no_warnings': True,
-            'cookiefile': COOKIE_FILE,
-            'skip_download': True,
-            'http_headers': {
-                'User-Agent': 'Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.91 Mobile Safari/537.36',
-            }
-        }
+        ydl_opts = {**YDL_BASE_OPTS, 'skip_download': True}
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
@@ -85,8 +95,8 @@ def get_info():
                 if not fmt_url or protocol in ('m3u8', 'm3u8_native', 'dash'):
                     continue
 
-                # Video formats
-                if vcodec != 'none' and height and height not in seen_heights:
+                # Video formats (with audio — vcodec & acodec both present)
+                if vcodec != 'none' and acodec != 'none' and height and height not in seen_heights:
                     seen_heights.add(height)
                     formats.append({
                         "format_id": f.get('format_id'),
@@ -106,7 +116,6 @@ def get_info():
                         "filesize": f.get('filesize') or f.get('filesize_approx')
                     })
 
-            # Sort video high to low
             video_fmts = sorted(
                 [f for f in formats if f['quality'] != 'audio'],
                 key=lambda x: int(x['quality'].replace('p', '')),
@@ -125,7 +134,72 @@ def get_info():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route('/download', methods=['GET'])
+def download():
+    """
+    Proxy the YouTube stream through our server so browser downloads the file.
+    ?url=YOUTUBE_URL & quality=720p (or 'audio') & title=VideoTitle
+    """
+    yt_url   = request.args.get('url')
+    quality  = request.args.get('quality', '720p')
+    title    = request.args.get('title', 'video')
+    is_audio = quality == 'audio'
+
+    if not yt_url:
+        return jsonify({"error": "URL required"}), 400
+
+    try:
+        # Pick format string
+        if is_audio:
+            fmt = 'bestaudio[ext=m4a]/bestaudio'
+            ext = 'm4a'
+        else:
+            h = quality.replace('p', '')
+            # bestvideo+bestaudio merged — needs ffmpeg; fallback to combined stream
+            fmt = f'best[height<={h}][ext=mp4]/best[height<={h}]/best'
+            ext = 'mp4'
+
+        ydl_opts = {
+            **YDL_BASE_OPTS,
+            'skip_download': True,
+            'format': fmt,
+        }
+
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(yt_url, download=False)
+            stream_url = info.get('url') or info['requested_formats'][0]['url']
+            real_title = info.get('title', title)
+
+        filename = f"{safe_filename(real_title)}.{ext}"
+
+        # Stream the file through Flask as a proxy (chunked)
+        req = urllib.request.Request(
+            stream_url,
+            headers={'User-Agent': YDL_BASE_OPTS['http_headers']['User-Agent']}
+        )
+        remote = urllib.request.urlopen(req, timeout=30)
+        content_length = remote.headers.get('Content-Length')
+
+        def generate():
+            while True:
+                chunk = remote.read(1024 * 64)  # 64 KB chunks
+                if not chunk:
+                    break
+                yield chunk
+
+        headers = {
+            'Content-Disposition': f'attachment; filename="{filename}"',
+            'Content-Type': 'video/mp4' if not is_audio else 'audio/mp4',
+        }
+        if content_length:
+            headers['Content-Length'] = content_length
+
+        return Response(generate(), headers=headers, status=200)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
-   
