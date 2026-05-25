@@ -180,28 +180,11 @@ def download():
 
         filename = f"{safe_filename(real_title)}.{ext}"
 
-        req = urllib.request.Request(
-            stream_url,
-            headers={'User-Agent': YDL_BASE_OPTS['http_headers']['User-Agent']}
-        )
-        remote = urllib.request.urlopen(req, timeout=30)
-        content_length = remote.headers.get('Content-Length')
-
-        def generate():
-            while True:
-                chunk = remote.read(1024 * 64)
-                if not chunk:
-                    break
-                yield chunk
-
-        headers = {
-            'Content-Disposition': f'attachment; filename="{filename}"',
-            'Content-Type': 'video/mp4' if not is_audio else 'audio/mp4',
-        }
-        if content_length:
-            headers['Content-Length'] = content_length
-
-        return Response(generate(), headers=headers, status=200)
+        # Redirect to stream URL directly — avoids Render timeout on free plan
+        from flask import redirect
+        response = redirect(stream_url, code=302)
+        response.headers['Content-Disposition'] = f'attachment; filename="{filename}"'
+        return response
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
