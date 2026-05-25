@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title id="pageTitle">YouTube Video Downloader – Download 240p 480p 720p 1080p 2K 4K MP3 Free</title>
+<meta name="description" content="Free YouTube video downloader. Download YouTube videos in 240p, 480p, 720p, 1080p, 2K, 4K HD quality or extract MP3 audio. No software needed, works on any device."/>
+<meta name="keywords" content="youtube video downloader, youtube to mp4, youtube to mp3, download youtube video 4k, youtube shorts downloader, youtube audio download, yt downloader free"/>
+<meta name="robots" content="index, follow"/>
+<meta name="author" content="EmYtsave"/>
+<link rel="canonical" href="https://emytsave.in/youtube-downloader"/>
+<meta property="og:title" content="YouTube Video Downloader – All Formats Free"/>
+<meta property="og:description" content="Download YouTube videos in any quality: 240p to 4K, or extract MP3 audio. Free, fast, no signup."/>
+<meta property="og:type" content="website"/>
+<meta name="twitter:card" content="summary_large_image"/>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"EmYtsave YouTube Downloader","url":"https://emytsave.in","description":"Free YouTube video downloader supporting 240p, 480p, 720p, 1080p, 2K, 4K and MP3 audio extraction.","applicationCategory":"MultimediaApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f13;--bg2:#16161d;--bg3:#1e1e28;
+  --card:#1a1a24;--border:#2a2a38;--border2:#333344;
+  --text:#f1f1f5;--muted:#7a7a95;--muted2:#555570;
+  --red:#ff0000;--red2:#ff3333;--red-soft:#2a1010;
+  --green:#22c55e;--green-soft:#0e2a1a;
+  --yellow:#fbbf24;--blue:#3b82f6;--purple:#a855f7;
+  --grad-red:linear-gradient(135deg,#ff0000,#cc0000);
+  --grad-hero:linear-gradient(135deg,#1a0808 0%,#0f0f13 50%,#08080f 100%);
+  --shadow-red:0 4px 24px rgba(255,0,0,.2);
+  --r:12px;--r-sm:8px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;overflow-x:hidden;min-height:100vh}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* NAV */
+.topbar{background:rgba(15,15,19,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:58px}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.logo-icon{width:34px;height:34px;background:var(--grad-red);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;box-shadow:var(--shadow-red)}
+.logo-name{font-family:'Sora',sans-serif;font-weight:800;font-size:1.1rem;color:var(--text)}
+.logo-name span{color:var(--red)}
+.nav-links{display:flex;gap:4px;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.82rem;font-weight:600;padding:7px 13px;border-radius:var(--r-sm);transition:all .18s;font-family:'Sora',sans-serif}
+.nav-links a:hover,.nav-links a.active{color:var(--text);background:var(--bg3)}
+@media(max-width:560px){.nav-links{display:none}}
+
+/* HERO */
+.hero{background:var(--grad-hero);padding:56px 20px 48px;text-align:center;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse,rgba(255,0,0,.07) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--red-soft);border:1px solid rgba(255,0,0,.2);border-radius:100px;padding:5px 14px;font-size:.75rem;font-weight:600;color:var(--red2);margin-bottom:20px;font-family:'Sora',sans-serif}
+.hero h1{font-family:'Sora',sans-serif;font-size:clamp(1.8rem,5vw,2.7rem);font-weight:800;letter-spacing:-.6px;line-height:1.12;margin-bottom:12px;transition:all .3s ease}
+.hero h1 .yt-red{color:var(--red)}
+.hero-sub{color:var(--muted);font-size:.9rem;margin-bottom:32px;max-width:480px;margin-left:auto;margin-right:auto;transition:all .3s ease}
+
+/* 3 TABS */
+.tool-tabs{display:inline-flex;background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:5px;gap:4px;margin-bottom:24px}
+.t-tab{display:flex;align-items:center;gap:7px;padding:9px 20px;border-radius:10px;border:none;background:transparent;font-family:'Sora',sans-serif;font-size:.82rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s}
+.t-tab svg{width:15px;height:15px;flex-shrink:0}
+.t-tab.active.video-tab{background:var(--grad-red);color:#fff;box-shadow:0 2px 14px rgba(255,0,0,.3)}
+.t-tab.active.audio-tab{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;box-shadow:0 2px 14px rgba(34,197,94,.3)}
+.t-tab.active.shorts-tab{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;box-shadow:0 2px 14px rgba(168,85,247,.3)}
+@media(max-width:440px){.t-tab{padding:8px 12px;font-size:.75rem}}
+
+/* TOOL BOX */
+.tool-box{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px;max-width:700px;margin:0 auto;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+.url-row{display:flex;align-items:center;background:var(--bg3);border:1.5px solid var(--border2);border-radius:100px;padding:5px 5px 5px 18px;gap:8px;margin-bottom:16px;transition:border-color .2s,box-shadow .2s}
+.url-row:focus-within{border-color:var(--red);box-shadow:0 0 0 3px rgba(255,0,0,.12)}
+.url-icon{color:var(--muted2);display:flex;align-items:center;flex-shrink:0}
+.url-icon svg{width:16px;height:16px}
+#urlInput{flex:1;background:transparent;border:none;outline:none;font-size:.92rem;color:var(--text);font-family:'DM Sans',sans-serif;min-width:0;padding:6px 0}
+#urlInput::placeholder{color:var(--muted2)}
+.btn-fetch{display:flex;align-items:center;gap:7px;padding:10px 22px;border-radius:100px;background:var(--grad-red);border:none;color:#fff;font-family:'Sora',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;transition:all .18s;white-space:nowrap;flex-shrink:0;box-shadow:0 2px 12px rgba(255,0,0,.3)}
+.btn-fetch:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(255,0,0,.4)}
+.btn-fetch svg{width:14px;height:14px}
+
+/* FORMAT SECTION */
+.format-label{font-family:'Sora',sans-serif;font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+
+/* DROPDOWN */
+.quality-dropdown-wrap{margin-bottom:16px;position:relative}
+.quality-select{width:100%;background:var(--bg3);border:2px solid var(--border2);border-radius:var(--r);padding:13px 40px 13px 16px;color:var(--text);font-size:.92rem;font-weight:600;font-family:'Sora',sans-serif;outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23ff0000' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-color:var(--bg3);transition:border-color .2s}
+.quality-select:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(255,0,0,.1)}
+.quality-select option{background:var(--bg2);color:var(--text);padding:8px}
+.quality-select.audio-select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(34,197,94,.1)}
+.quality-select.audio-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2322c55e' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E")}
+.quality-select.shorts-select:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(168,85,247,.1)}
+.quality-select.shorts-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23a855f7' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E")}
+
+/* LOADING STATE */
+.quality-loading{display:none;align-items:center;gap:10px;padding:13px 16px;background:var(--bg3);border:2px solid var(--border);border-radius:var(--r);color:var(--muted);font-size:.85rem;margin-bottom:16px}
+.spin-sm{width:16px;height:16px;border:2px solid var(--border2);border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+
+/* DOWNLOAD BUTTON */
+.btn-dl-main{width:100%;padding:14px;border-radius:var(--r);border:none;font-family:'Sora',sans-serif;font-weight:800;font-size:.95rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;color:#fff}
+.btn-dl-main.video-dl{background:var(--grad-red);box-shadow:0 4px 18px rgba(255,0,0,.3)}
+.btn-dl-main.video-dl:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(255,0,0,.4)}
+.btn-dl-main.audio-dl{background:linear-gradient(135deg,#16a34a,#22c55e);box-shadow:0 4px 18px rgba(34,197,94,.25)}
+.btn-dl-main.audio-dl:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(34,197,94,.35)}
+.btn-dl-main.shorts-dl{background:linear-gradient(135deg,#7c3aed,#a855f7);box-shadow:0 4px 18px rgba(168,85,247,.25)}
+.btn-dl-main.shorts-dl:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(168,85,247,.35)}
+.btn-dl-main:disabled{opacity:.45;cursor:not-allowed;transform:none !important}
+.btn-dl-main svg{width:17px;height:17px}
+
+/* ERROR / PROGRESS / RESULT */
+#errorBox{display:none;margin-top:14px;background:#2a1010;border:1px solid rgba(255,80,80,.25);border-radius:var(--r-sm);padding:11px 16px;color:#ff8080;font-size:.84rem;align-items:center;gap:8px}
+#progressBox{display:none;margin-top:16px;text-align:center}
+.spin-wrap{display:flex;justify-content:center;margin-bottom:14px}
+.spinner{width:42px;height:42px;border:3px solid var(--border2);border-top-color:var(--red);border-radius:50%;animation:spin .75s linear infinite}
+.spinner.green{border-top-color:var(--green)}
+.spinner.purple{border-top-color:var(--purple)}
+@keyframes spin{to{transform:rotate(360deg)}}
+#progTitle{font-family:'Sora',sans-serif;font-weight:700;font-size:.9rem;color:var(--text);margin-bottom:4px}
+#progNote{font-size:.76rem;color:var(--muted);margin-bottom:12px}
+.prog-track{height:5px;background:var(--border);border-radius:100px;overflow:hidden;max-width:320px;margin:0 auto}
+.prog-fill{height:100%;width:0%;border-radius:100px;transition:width .5s ease;background:var(--grad-red)}
+.prog-fill.green-fill{background:linear-gradient(90deg,#16a34a,#22c55e)}
+.prog-fill.purple-fill{background:linear-gradient(90deg,#7c3aed,#a855f7)}
+#resultBox{display:none;margin-top:14px}
+.res-card{border-radius:var(--r);padding:16px 18px}
+.res-card.video-res{background:var(--red-soft);border:1px solid rgba(255,0,0,.2)}
+.res-card.audio-res{background:var(--green-soft);border:1px solid rgba(34,197,94,.2)}
+.res-card.shorts-res{background:#1a0a2e;border:1px solid rgba(168,85,247,.2)}
+.res-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.res-thumb{width:72px;height:50px;border-radius:var(--r-sm);background:var(--bg3);object-fit:cover;border:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.5rem}
+.res-info{flex:1;min-width:120px}
+.res-title{font-family:'Sora',sans-serif;font-weight:700;font-size:.88rem;color:var(--text);margin-bottom:3px}
+.res-meta{font-size:.75rem;color:var(--muted)}
+.btn-save{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:var(--r-sm);border:none;font-family:'Sora',sans-serif;font-weight:700;font-size:.83rem;cursor:pointer;color:#fff;text-decoration:none;transition:all .18s;white-space:nowrap}
+.btn-save.red-save{background:var(--grad-red);box-shadow:0 2px 10px rgba(255,0,0,.25)}
+.btn-save.green-save{background:linear-gradient(135deg,#16a34a,#22c55e);box-shadow:0 2px 10px rgba(34,197,94,.2)}
+.btn-save.purple-save{background:linear-gradient(135deg,#7c3aed,#a855f7);box-shadow:0 2px 10px rgba(168,85,247,.2)}
+.btn-save:hover{transform:translateY(-1px)}
+.btn-save svg{width:13px;height:13px}
+
+/* REST OF PAGE */
+.wrap{max-width:960px;margin:0 auto;padding:52px 20px}
+.wrap-sm{max-width:960px;margin:0 auto;padding:40px 20px}
+.sec-head{text-align:center;margin-bottom:36px}
+.sec-badge{display:inline-block;background:var(--red-soft);color:var(--red2);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:10px;font-family:'Sora',sans-serif;border:1px solid rgba(255,0,0,.15)}
+.sec-badge.green-badge{background:var(--green-soft);color:var(--green);border-color:rgba(34,197,94,.2)}
+.sec-title{font-family:'Sora',sans-serif;font-size:clamp(1.3rem,3.5vw,1.85rem);font-weight:800;letter-spacing:-.4px;margin-bottom:8px}
+.sec-sub{color:var(--muted);font-size:.88rem}
+.steps-row{display:flex;align-items:flex-start;justify-content:center;gap:0;flex-wrap:wrap}
+.step-card{flex:1;min-width:160px;max-width:210px;text-align:center;padding:0 14px}
+.step-num{width:50px;height:50px;border-radius:50%;background:var(--red-soft);border:2px solid rgba(255,0,0,.25);color:var(--red2);font-family:'Sora',sans-serif;font-weight:800;font-size:1.1rem;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.step-card h3{font-family:'Sora',sans-serif;font-weight:700;font-size:.88rem;margin-bottom:6px;color:var(--text)}
+.step-card p{font-size:.8rem;color:var(--muted);line-height:1.55}
+.step-arr{display:flex;align-items:flex-start;padding-top:24px;color:var(--border2);font-size:1.3rem}
+@media(max-width:520px){.step-arr{display:none}}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.feat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;transition:all .18s}
+.feat-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.feat-icon{width:42px;height:42px;border-radius:10px;background:var(--red-soft);border:1px solid rgba(255,0,0,.15);display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:12px}
+.feat-card h4{font-family:'Sora',sans-serif;font-weight:700;font-size:.88rem;margin-bottom:6px;color:var(--text)}
+.feat-card p{font-size:.8rem;color:var(--muted);line-height:1.55}
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.faq-grid{grid-template-columns:1fr}}
+.faq-item{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.faq-q{padding:14px 18px;font-family:'Sora',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--text);transition:background .15s}
+.faq-q:hover{background:var(--bg3)}
+.faq-ic{width:22px;height:22px;border-radius:50%;background:var(--red-soft);color:var(--red2);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800;flex-shrink:0;transition:transform .25s,background .2s;border:1px solid rgba(255,0,0,.15)}
+.faq-item.open .faq-ic{transform:rotate(45deg);background:var(--red);color:#fff;border-color:transparent}
+.faq-a{display:none;padding:0 18px 14px;font-size:.83rem;color:var(--muted);line-height:1.7;border-top:1px solid var(--border)}
+.faq-item.open .faq-a{display:block}
+.dmca-wrap{background:#0d0d10;border:1px solid var(--border);border-radius:var(--r);padding:24px 28px;display:flex;align-items:flex-start;gap:16px}
+.dmca-wrap h3{font-family:'Sora',sans-serif;font-weight:700;font-size:.92rem;margin-bottom:6px;color:var(--text)}
+.dmca-wrap p{font-size:.82rem;color:var(--muted);line-height:1.7}
+.dmca-wrap a{color:#ff8080}
+hr{border:none;border-top:1px solid var(--border)}
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20px 28px}
+.foot-inner{max-width:1100px;margin:0 auto}
+.foot-grid{display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:32px;margin-bottom:36px}
+@media(max-width:680px){.foot-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:380px){.foot-grid{grid-template-columns:1fr}}
+.foot-brand p{font-size:.8rem;color:var(--muted);margin-top:8px;line-height:1.7;max-width:200px}
+.foot-col h4{font-family:'Sora',sans-serif;font-weight:700;font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
+.foot-col ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.foot-col a{font-size:.82rem;color:var(--muted);text-decoration:none;transition:color .15s}
+.foot-col a:hover{color:var(--text)}
+.foot-bottom{border-top:1px solid var(--border);padding-top:20px;font-size:.75rem;color:var(--muted2);line-height:1.7}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="nav-inner">
+    <a href="/" class="logo">
+      <div class="logo-icon">▶</div>
+      <span class="logo-name">Em<span>YtSave</span>.in</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#tool" class="active">Downloader</a></li>
+      <li><a href="#how-to">How To</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="tool">
+  <div class="hero-badge">▶ Free · No Signup · All Qualities</div>
+  <h1 id="heroTitle"><span class="yt-red">YouTube</span> Video Downloader</h1>
+  <p class="hero-sub" id="heroSub">Download videos in 240p, 480p, 720p, 1080p, 2K, 4K. Fast &amp; free.</p>
+
+  <!-- 3 TABS -->
+  <div class="tool-tabs" role="tablist">
+    <button class="t-tab video-tab active" id="tabVideo" role="tab" onclick="setMode('video')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+      Video
+    </button>
+    <button class="t-tab audio-tab" id="tabAudio" role="tab" onclick="setMode('audio')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      Audio / MP3
+    </button>
+    <button class="t-tab shorts-tab" id="tabShorts" role="tab" onclick="setMode('shorts')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l4.553-2.277A1 1 0 0 1 21 8.623v6.754a1 1 0 0 1-1.447.894L15 14"/><rect x="3" y="6" width="12" height="12" rx="2"/></svg>
+      Shorts
+    </button>
+  </div>
+
+  <div class="tool-box">
+    <!-- URL INPUT -->
+    <div class="url-row">
+      <div class="url-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      </div>
+      <input id="urlInput" type="url" placeholder="Paste YouTube link here..." autocomplete="off" spellcheck="false" aria-label="YouTube video URL" onkeydown="if(event.key==='Enter')fetchAndShow()"/>
+      <button class="btn-fetch" onclick="pasteURL()" aria-label="Paste URL">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Paste & Fetch
+      </button>
+    </div>
+
+    <!-- FORMAT LABEL -->
+    <div class="format-label" id="formatLabel">Select Video Quality</div>
+
+    <!-- LOADING STATE -->
+    <div class="quality-loading" id="qualityLoading">
+      <div class="spin-sm"></div>
+      Fetching available formats…
+    </div>
+
+    <!-- DYNAMIC DROPDOWN -->
+    <div class="quality-dropdown-wrap" id="qualityDropWrap">
+      <select class="quality-select" id="qualitySelect" onchange="onQualityChange()">
+        <option value="1080p|mp4">1080p Full HD — MP4</option>
+        <option value="720p|mp4">720p HD — MP4</option>
+        <option value="480p|mp4">480p — MP4</option>
+        <option value="360p|mp4">360p — MP4</option>
+        <option value="240p|mp4">240p — MP4</option>
+      </select>
+    </div>
+
+    <!-- DOWNLOAD BUTTON -->
+    <button class="btn-dl-main video-dl" id="dlBtn" onclick="startDownload()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span id="dlBtnText">Download Video</span>
+    </button>
+
+    <!-- ERROR -->
+    <div id="errorBox" role="alert">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="errorText">Please enter a valid YouTube URL.</span>
+    </div>
+
+    <!-- PROGRESS -->
+    <div id="progressBox" role="status">
+      <div class="spin-wrap"><div class="spinner" id="mainSpinner"></div></div>
+      <div id="progTitle">Processing video…</div>
+      <div id="progNote">Fetching stream, please wait</div>
+      <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+    </div>
+
+    <!-- RESULT -->
+    <div id="resultBox">
+      <div class="res-card" id="resCard">
+        <div class="res-row">
+          <div class="res-thumb" id="resThumb">🎬</div>
+          <div class="res-info">
+            <div class="res-title" id="resTitle">YouTube Video</div>
+            <div class="res-meta" id="resMeta">Ready to download</div>
+          </div>
+          <a class="btn-save red-save" id="dlLink" href="#">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span id="saveLbl">Save File</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr/>
+
+<section id="how-to">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-badge">Step-by-step</span>
+      <h2 class="sec-title">How to Download YouTube Video</h2>
+      <p class="sec-sub">Download in any quality in 3 simple steps</p>
+    </div>
+    <div class="steps-row">
+      <div class="step-card"><div class="step-num">1</div><h3>Copy YouTube Link</h3><p>Open YouTube, go to the video and copy the URL from the address bar or share button.</p></div>
+      <div class="step-arr">→</div>
+      <div class="step-card"><div class="step-num">2</div><h3>Paste &amp; Fetch Formats</h3><p>Paste the URL and click "Paste &amp; Fetch" — real available qualities will load in the dropdown.</p></div>
+      <div class="step-arr">→</div>
+      <div class="step-card"><div class="step-num">3</div><h3>Select &amp; Download</h3><p>Choose your quality from the dropdown and click Download — file saves directly to your device.</p></div>
+    </div>
+  </div>
+</section>
+
+<hr/>
+
+<section id="features">
+  <div class="wrap-sm">
+    <div class="sec-head">
+      <span class="sec-badge">Why EmYtsave</span>
+      <h2 class="sec-title">Key Features</h2>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-icon">⚡</div><h4>Real Formats Only</h4><p>Dropdown shows only formats actually available for that video — no guessing or errors.</p></div>
+      <div class="feat-card"><div class="feat-icon">🎯</div><h4>All Resolutions</h4><p>From 240p to 4K Ultra HD — whatever YouTube has, we show it.</p></div>
+      <div class="feat-card"><div class="feat-icon">🎵</div><h4>Audio Extraction</h4><p>Extract best available audio from any YouTube video in original quality.</p></div>
+      <div class="feat-card"><div class="feat-icon">📱</div><h4>Works Everywhere</h4><p>Android, iPhone, Windows, Mac — any browser, any device.</p></div>
+      <div class="feat-card"><div class="feat-icon">🔒</div><h4>No Login Needed</h4><p>100% anonymous. No account, no registration — just paste and download.</p></div>
+      <div class="feat-card"><div class="feat-icon">💰</div><h4>Always Free</h4><p>No subscriptions, no hidden charges. Unlimited downloads completely free.</p></div>
+    </div>
+  </div>
+</section>
+
+<hr/>
+
+<section id="faq">
+  <div class="wrap-sm">
+    <div class="sec-head">
+      <span class="sec-badge">FAQ</span>
+      <h2 class="sec-title">Frequently Asked Questions</h2>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How to download YouTube video in 4K?<div class="faq-ic">+</div></div><div class="faq-a" hidden>Paste the YouTube URL, click "Paste &amp; Fetch" — if 4K is available for that video it will appear in the dropdown. Select it and click Download.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Can I download YouTube audio as MP3?<div class="faq-ic">+</div></div><div class="faq-a" hidden>Yes! Click the "Audio / MP3" tab, paste your YouTube URL and click Paste &amp; Fetch. Select the audio format and click Extract Audio.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Can I download YouTube Shorts?<div class="faq-ic">+</div></div><div class="faq-a" hidden>Yes! Click the "Shorts" tab, paste your Shorts URL, fetch formats and download.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Is EmYtsave completely free?<div class="faq-ic">+</div></div><div class="faq-a" hidden>Yes, 100% free. No account, no subscription, no payment needed.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Why are some qualities missing?<div class="faq-ic">+</div></div><div class="faq-a" hidden>The dropdown only shows qualities that YouTube actually has for that specific video. Not all videos are available in 4K or 1080p.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Does it work on mobile?<div class="faq-ic">+</div></div><div class="faq-a" hidden>Absolutely. EmYtsave works on all devices — Android, iPhone, tablets, desktop. No app needed.</div></div>
+    </div>
+  </div>
+</section>
+
+<hr/>
+
+<section id="disclaimer">
+  <div class="wrap-sm">
+    <div class="dmca-wrap">
+      <div style="font-size:1.4rem;flex-shrink:0">🛡</div>
+      <div>
+        <h3>DMCA Compliance</h3>
+        <p>EmYtsave.in is not affiliated with YouTube™ or Google LLC. We do not host or store any video files. This tool is intended for content you have the right to download. If you have copyright concerns, <a href="mailto:dmca@emytsave.in">contact us</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="/" class="logo" style="font-size:1rem">
+          <div class="logo-icon" style="width:28px;height:28px;font-size:.85rem">▶</div>
+          <span class="logo-name">Em<span>YtSave</span>.in</span>
+        </a>
+        <p>Fast, free YouTube downloader. Save videos &amp; audio in any quality — no software needed.</p>
+      </div>
+      <div class="foot-col"><h4>Tools</h4><ul><li><a href="#">YouTube Downloader</a></li><li><a href="#">YouTube to MP3</a></li><li><a href="#">YouTube to MP4</a></li><li><a href="#">Shorts Downloader</a></li></ul></div>
+      <div class="foot-col"><h4>Legal</h4><ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">DMCA Policy</a></li></ul></div>
+      <div class="foot-col"><h4>Support</h4><ul><li><a href="#">Contact Us</a></li><li><a href="#">FAQ</a></li><li><a href="#">How It Works</a></li></ul></div>
+    </div>
+    <div class="foot-bottom">
+      <p>EmYtsave.in is not affiliated with YouTube™ or Google LLC. YouTube is a trademark of Google LLC.</p>
+      <p style="margin-top:6px">© 2026 EmYtsave.in · All Rights Reserved</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────────────
+let currentMode = 'video';
+let fetchedFormats = [];
+let lastFetchedUrl = '';
+let videoTitle = '';
+
+const BACKEND = 'https://emytsave-backend.onrender.com';
+
+// Tab config — title, subtitle, button text, dropdown style, spinner color
+const TAB_CONFIG = {
+  video: {
+    h1: '<span class="yt-red">YouTube</span> Video Downloader',
+    sub: 'Download videos in 240p, 480p, 720p, 1080p, 2K, 4K. Fast &amp; free.',
+    btnText: 'Download Video',
+    btnClass: 'btn-dl-main video-dl',
+    selectClass: 'quality-select',
+    spinClass: 'spinner',
+    label: 'Select Video Quality',
+    resClass: 'res-card video-res',
+    saveClass: 'btn-save red-save',
+    thumb: '🎬'
+  },
+  audio: {
+    h1: '<span class="yt-red">YouTube</span> to MP3 Converter',
+    sub: 'Extract high-quality audio from any YouTube video. Free &amp; fast.',
+    btnText: 'Extract Audio',
+    btnClass: 'btn-dl-main audio-dl',
+    selectClass: 'quality-select audio-select',
+    spinClass: 'spinner green',
+    label: 'Select Audio Format',
+    resClass: 'res-card audio-res',
+    saveClass: 'btn-save green-save',
+    thumb: '🎵'
+  },
+  shorts: {
+    h1: '<span class="yt-red">YouTube</span> Shorts Downloader',
+    sub: 'Download YouTube Shorts in full quality. No watermark. Free.',
+    btnText: 'Download Short',
+    btnClass: 'btn-dl-main shorts-dl',
+    selectClass: 'quality-select shorts-select',
+    spinClass: 'spinner purple',
+    label: 'Select Shorts Quality',
+    resClass: 'res-card shorts-res',
+    saveClass: 'btn-save purple-save',
+    thumb: '📱'
+  }
+};
+
+// Default formats shown before fetch
+const DEFAULT_FORMATS = {
+  video: [
+    {value:'2160p|mp4', label:'4K Ultra HD (2160p) — MP4'},
+    {value:'1440p|mp4', label:'2K QHD (1440p) — MP4'},
+    {value:'1080p|mp4', label:'1080p Full HD — MP4'},
+    {value:'720p|mp4',  label:'720p HD — MP4'},
+    {value:'480p|mp4',  label:'480p — MP4'},
+    {value:'360p|mp4',  label:'360p — MP4'},
+    {value:'240p|mp4',  label:'240p — MP4'},
+  ],
+  audio: [
+    {value:'audio|m4a', label:'Best Audio — M4A (AAC)'},
+    {value:'audio|webm', label:'Best Audio — WebM'},
+  ],
+  shorts: [
+    {value:'1080p|mp4', label:'1080p Full HD — MP4'},
+    {value:'720p|mp4',  label:'720p HD — MP4'},
+    {value:'480p|mp4',  label:'480p — MP4'},
+    {value:'360p|mp4',  label:'360p — MP4'},
+  ]
+};
+
+// ─── MODE SWITCH ─────────────────────────────────────────────────
+function setMode(mode) {
+  currentMode = mode;
+  ['video','audio','shorts'].forEach(t => {
+    const el = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
+    el.classList.toggle('active', t === mode);
+  });
+
+  const cfg = TAB_CONFIG[mode];
+  document.getElementById('heroTitle').innerHTML = cfg.h1;
+  document.getElementById('heroSub').innerHTML = cfg.sub;
+  document.getElementById('dlBtnText').textContent = cfg.btnText;
+  document.getElementById('dlBtn').className = cfg.btnClass;
+  document.getElementById('formatLabel').textContent = cfg.label;
+
+  // Rebuild dropdown — use fetched if same URL, else defaults
+  if (fetchedFormats.length > 0 && lastFetchedUrl) {
+    buildDropdown(filterFormats(fetchedFormats, mode), cfg.selectClass);
+  } else {
+    buildDropdown(DEFAULT_FORMATS[mode], cfg.selectClass);
+  }
+  hideAll();
+}
+
+// ─── BUILD DROPDOWN ───────────────────────────────────────────────
+function buildDropdown(formats, selectClass) {
+  const sel = document.getElementById('qualitySelect');
+  sel.className = selectClass || 'quality-select';
+  sel.innerHTML = '';
+  if (!formats || formats.length === 0) {
+    sel.innerHTML = '<option value="">— No formats available —</option>';
+    return;
+  }
+  formats.forEach((f, i) => {
+    const opt = document.createElement('option');
+    opt.value = f.value;
+    opt.textContent = f.label;
+    if (i === 0) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+function onQualityChange() {
+  // Can add preview logic here if needed
+}
+
+// Filter formats from backend by current tab
+function filterFormats(formats, mode) {
+  if (!formats || formats.length === 0) return [];
+  if (mode === 'audio') return formats.filter(f => f.quality === 'audio');
+  return formats.filter(f => f.quality !== 'audio');
+}
+
+// ─── PASTE & FETCH ────────────────────────────────────────────────
+async function pasteURL() {
+  let url = document.getElementById('urlInput').value.trim();
+  if (!url) {
+    try {
+      url = await navigator.clipboard.readText();
+      if (url) document.getElementById('urlInput').value = url;
+    } catch(e) {
+      document.getElementById('urlInput').focus();
+      return;
+    }
+  }
+  if (url) fetchAndShow();
+}
+
+async function fetchAndShow() {
+  const url = document.getElementById('urlInput').value.trim();
+  hideAll();
+  if (!url) { showError('Please paste a YouTube link first.'); return; }
+  if (!isYTUrl(url)) { showError('Please enter a valid YouTube URL (youtube.com or youtu.be).'); return; }
+
+  // Show loading spinner in dropdown area
+  document.getElementById('qualityLoading').style.display = 'flex';
+  document.getElementById('qualityDropWrap').style.display = 'none';
+  document.getElementById('dlBtn').disabled = true;
+
+  try {
+    const res = await fetch(`${BACKEND}/info?url=${encodeURIComponent(url)}`);
+    const data = await res.json();
+
+    document.getElementById('qualityLoading').style.display = 'none';
+    document.getElementById('qualityDropWrap').style.display = 'block';
+    document.getElementById('dlBtn').disabled = false;
+
+    if (data.error) { showError(data.error); return; }
+
+    // Store fetched data
+    fetchedFormats = data.formats || [];
+    lastFetchedUrl = url;
+    videoTitle = data.title || 'video';
+
+    // Build dropdown with REAL available formats only
+    const filtered = filterFormats(fetchedFormats, currentMode);
+    const cfg = TAB_CONFIG[currentMode];
+
+    if (filtered.length > 0) {
+      const opts = filtered.map(f => ({
+        value: f.quality + '|' + f.ext,
+        label: f.quality === 'audio'
+          ? `Best Audio — ${f.ext.toUpperCase()}${f.filesize ? ' (~'+Math.round(f.filesize/1024/1024)+'MB)' : ''}`
+          : `${f.quality} — ${f.ext.toUpperCase()}${f.filesize ? ' (~'+Math.round(f.filesize/1024/1024)+'MB)' : ''}`
+      }));
+      buildDropdown(opts, cfg.selectClass);
+    } else {
+      buildDropdown(DEFAULT_FORMATS[currentMode], cfg.selectClass);
+    }
+
+    // ✅ Auto-select first (best) format and start download immediately
+    document.getElementById('qualitySelect').selectedIndex = 0;
+    startDownload();
+
+  } catch(e) {
+    document.getElementById('qualityLoading').style.display = 'none';
+    document.getElementById('qualityDropWrap').style.display = 'block';
+    document.getElementById('dlBtn').disabled = false;
+    showError('Could not reach server. Please try again.');
+  }
+}
+
+// ─── DOWNLOAD ─────────────────────────────────────────────────────
+function startDownload() {
+  const url = document.getElementById('urlInput').value.trim();
+  if (!url) { showError('Please paste a YouTube link first.'); return; }
+  if (!isYTUrl(url)) { showError('Please enter a valid YouTube URL.'); return; }
+
+  const selVal = document.getElementById('qualitySelect').value;
+  if (!selVal) { showError('Please select a quality.'); return; }
+
+  const [quality] = selVal.split('|');
+  const isAudio = quality === 'audio' || currentMode === 'audio';
+  const cfg = TAB_CONFIG[currentMode];
+
+  hideAll();
+  const progBox = document.getElementById('progressBox');
+  progBox.style.display = 'block';
+  document.getElementById('progTitle').textContent = isAudio ? 'Extracting audio…' : `Processing ${quality} video…`;
+  document.getElementById('progNote').textContent = 'Please wait, this may take 20-40 seconds…';
+  document.getElementById('mainSpinner').className = cfg.spinClass;
+
+  const fill = document.getElementById('progFill');
+  fill.style.width = '0%';
+  fill.className = 'prog-fill' + (isAudio ? ' green-fill' : currentMode === 'shorts' ? ' purple-fill' : '');
+
+  const pts = [10, 25, 45, 65, 82, 95];
+  let i = 0;
+  const iv = setInterval(() => {
+    if (i < pts.length) { fill.style.width = pts[i]+'%'; i++; }
+  }, 500);
+
+  // Build download URL pointing to backend /download endpoint
+  const dlUrl = `${BACKEND}/download?url=${encodeURIComponent(url)}&quality=${encodeURIComponent(quality)}&title=${encodeURIComponent(videoTitle || 'video')}`;
+
+  // Small delay for UX, then show result
+  setTimeout(() => {
+    clearInterval(iv);
+    fill.style.width = '100%';
+    setTimeout(() => {
+      progBox.style.display = 'none';
+      showResult(dlUrl, isAudio, quality, selVal);
+    }, 300);
+  }, 2000);
+}
+
+// ─── SHOW RESULT ──────────────────────────────────────────────────
+function showResult(dlUrl, isAudio, quality, selVal) {
+  const cfg = TAB_CONFIG[currentMode];
+  document.getElementById('resCard').className = cfg.resClass;
+  document.getElementById('resThumb').textContent = cfg.thumb;
+  document.getElementById('resTitle').textContent = videoTitle || 'YouTube Video';
+
+  let metaText = '';
+  if (isAudio) {
+    const ext = selVal.split('|')[1] || 'm4a';
+    metaText = `${ext.toUpperCase()} Audio · Ready to download`;
+    document.getElementById('saveLbl').textContent = 'Save Audio';
+  } else {
+    metaText = `MP4 · ${quality} · Ready to download`;
+    document.getElementById('saveLbl').textContent = `Save ${quality} MP4`;
+  }
+
+  document.getElementById('resMeta').textContent = metaText;
+
+  const link = document.getElementById('dlLink');
+  link.className = cfg.saveClass;
+  link.href = dlUrl;
+  link.setAttribute('download', '');
+
+  document.getElementById('resultBox').style.display = 'block';
+}
+
+// ─── HELPERS ──────────────────────────────────────────────────────
+function isYTUrl(url) {
+  return /(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/|playlist)|youtu\.be\/)[\w\-?=&]+/.test(url);
+}
+
+function showError(msg) {
+  hideAll();
+  document.getElementById('errorText').textContent = msg;
+  document.getElementById('errorBox').style.display = 'flex';
+}
+
+function hideAll() {
+  document.getElementById('errorBox').style.display = 'none';
+  document.getElementById('progressBox').style.display = 'none';
+  document.getElementById('resultBox').style.display = 'none';
+}
+
+function toggleFaq(el) {
+  const item = el.parentElement;
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => {
+    i.classList.remove('open');
+    i.querySelector('.faq-a').hidden = true;
+  });
+  if (!wasOpen) {
+    item.classList.add('open');
+    item.querySelector('.faq-a').hidden = false;
+  }
+}
+</script>
+</body>
+</html>
