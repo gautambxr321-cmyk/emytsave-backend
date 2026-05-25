@@ -45,25 +45,27 @@ FALLBACK_COOKIES = """# Netscape HTTP Cookie File
 
 FALLBACK_COOKIE_FILE = "/tmp/yt_cookies_fallback.txt"
 
-def get_cookie_file():
-    """Secret File exist kare to use karo (read-only), warna fallback"""
-    if os.path.exists(COOKIE_FILE):
-        return COOKIE_FILE
-    # Write fallback to /tmp (writable)
-    try:
-        with open(FALLBACK_COOKIE_FILE, 'w') as f:
-            f.write(FALLBACK_COOKIES)
-        return FALLBACK_COOKIE_FILE
-    except Exception:
-        return FALLBACK_COOKIE_FILE
+ACTIVE_COOKIE_FILE = "/tmp/yt_cookies_active.txt"
 
-# Pre-write fallback on startup in case Secret File missing
-try:
-    if not os.path.exists(COOKIE_FILE):
-        with open(FALLBACK_COOKIE_FILE, 'w') as f:
-            f.write(FALLBACK_COOKIES)
-except Exception:
-    pass
+def get_cookie_file():
+    """Always use /tmp — copy from Secret File or use fallback"""
+    try:
+        if os.path.exists(COOKIE_FILE):
+            # Copy read-only secret file to writable /tmp
+            with open(COOKIE_FILE, 'r') as src:
+                data = src.read()
+            with open(ACTIVE_COOKIE_FILE, 'w') as dst:
+                dst.write(data)
+            return ACTIVE_COOKIE_FILE
+    except Exception:
+        pass
+    # Use fallback cookies
+    with open(ACTIVE_COOKIE_FILE, 'w') as f:
+        f.write(FALLBACK_COOKIES)
+    return ACTIVE_COOKIE_FILE
+
+# Setup cookies on startup
+get_cookie_file()
 
 YDL_BASE_OPTS = {
     'quiet': True,
