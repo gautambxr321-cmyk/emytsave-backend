@@ -103,33 +103,61 @@ def get_info():
             formats = []
             seen_heights = set()
 
-            for f in info.get('formats', []):
+            # Get best progressive format per height
+            all_fmts = info.get('formats', [])
+            
+            # First try: progressive (video+audio combined)
+            for f in all_fmts:
                 height = f.get('height')
                 vcodec = f.get('vcodec', 'none')
                 acodec = f.get('acodec', 'none')
                 fmt_url = f.get('url', '')
-                protocol = f.get('protocol', '')
+                ext = f.get('ext', 'mp4')
 
-                if not fmt_url:
+                if not fmt_url or not height:
                     continue
 
-                # Only combined streams (video+audio both present) — no FFmpeg needed
-                if vcodec != 'none' and acodec != 'none' and height and height not in seen_heights:
+                # Progressive stream — has both video and audio
+                if vcodec != 'none' and acodec != 'none' and height not in seen_heights:
                     seen_heights.add(height)
                     formats.append({
                         "format_id": f.get('format_id'),
                         "quality": f"{height}p",
-                        "ext": f.get('ext', 'mp4'),
+                        "ext": ext,
                         "filesize": f.get('filesize') or f.get('filesize_approx')
                     })
-                # Best audio only
-                elif vcodec == 'none' and acodec != 'none' and not any(x['quality'] == 'audio' for x in formats):
-                    formats.append({
-                        "format_id": f.get('format_id'),
-                        "quality": "audio",
-                        "ext": f.get('ext', 'm4a'),
-                        "filesize": f.get('filesize') or f.get('filesize_approx')
-                    })
+
+            # If no progressive found, add best available heights anyway
+            if not formats:
+                seen_heights2 = set()
+                for f in sorted(all_fmts, key=lambda x: x.get('height') or 0, reverse=True):
+                    height = f.get('height')
+                    vcodec = f.get('vcodec', 'none')
+                    if not height or vcodec == 'none':
+                        continue
+                    if height not in seen_heights2:
+                        seen_heights2.add(height)
+                        formats.append({
+                            "format_id": f.get('format_id'),
+                            "quality": f"{height}p",
+                            "ext": f.get('ext', 'mp4'),
+                            "filesize": f.get('filesize') or f.get('filesize_approx')
+                        })
+
+            # Audio
+            for f in all_fmts:
+                vcodec = f.get('vcodec', 'none')
+                acodec = f.get('acodec', 'none')
+                fmt_url = f.get('url', '')
+                if fmt_url and vcodec == 'none' and acodec != 'none':
+                    if not any(x['quality'] == 'audio' for x in formats):
+                        formats.append({
+                            "format_id": f.get('format_id'),
+                            "quality": "audio",
+                            "ext": f.get('ext', 'm4a'),
+                            "filesize": f.get('filesize') or f.get('filesize_approx')
+                        })
+                    break
 
             video_fmts = sorted(
                 [f for f in formats if f['quality'] != 'audio'],
@@ -165,12 +193,12 @@ def download():
             ext = 'm4a'
         else:
             h = quality.replace('p', '')
-            # FFmpeg available — merge best video+audio
+            # No FFmpeg — use progressive streams only (video+audio combined)
             fmt = (
-                f'bestvideo[height<={h}][ext=mp4]+bestaudio[ext=m4a]'
-                f'/bestvideo[height<={h}]+bestaudio'
-                f'/best[height<={h}][ext=mp4]'
-                f'/best[height<={h}]'
+                f'best[height<={h}][ext=mp4][vcodec!=none][acodec!=none]'
+                f'/best[height<={h}][vcodec!=none][acodec!=none]'
+                f'/best[ext=mp4][vcodec!=none][acodec!=none]'
+                f'/best[vcodec!=none][acodec!=none]'
                 f'/best'
             )
             ext = 'mp4'
