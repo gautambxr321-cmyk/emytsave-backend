@@ -165,13 +165,13 @@ def download():
             ext = 'm4a'
         else:
             h = quality.replace('p', '')
-            # Only progressive (video+audio combined) streams — no FFmpeg needed
+            # FFmpeg available — merge best video+audio
             fmt = (
-                f'worstvideo[height>={h}][vcodec!=none][acodec!=none][ext=mp4]'
-                f'/best[height<={h}][vcodec!=none][acodec!=none][ext=mp4]'
-                f'/best[height<={h}][vcodec!=none][acodec!=none]'
-                f'/best[vcodec!=none][acodec!=none][ext=mp4]'
-                f'/best[vcodec!=none][acodec!=none]'
+                f'bestvideo[height<={h}][ext=mp4]+bestaudio[ext=m4a]'
+                f'/bestvideo[height<={h}]+bestaudio'
+                f'/best[height<={h}][ext=mp4]'
+                f'/best[height<={h}]'
+                f'/best'
             )
             ext = 'mp4'
 
