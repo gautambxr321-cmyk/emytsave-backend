@@ -113,7 +113,7 @@ def get_info():
                 if not fmt_url:
                     continue
 
-                # Include all formats with video+audio combined
+                # Only combined streams (video+audio both present) — no FFmpeg needed
                 if vcodec != 'none' and acodec != 'none' and height and height not in seen_heights:
                     seen_heights.add(height)
                     formats.append({
@@ -165,12 +165,13 @@ def download():
             ext = 'm4a'
         else:
             h = quality.replace('p', '')
+            # Only progressive (video+audio combined) streams — no FFmpeg needed
             fmt = (
-                f'best[height={h}][ext=mp4]'
-                f'/best[height<={h}][ext=mp4]'
-                f'/best[height<={h}]'
-                f'/best[ext=mp4]'
-                f'/best'
+                f'worstvideo[height>={h}][vcodec!=none][acodec!=none][ext=mp4]'
+                f'/best[height<={h}][vcodec!=none][acodec!=none][ext=mp4]'
+                f'/best[height<={h}][vcodec!=none][acodec!=none]'
+                f'/best[vcodec!=none][acodec!=none][ext=mp4]'
+                f'/best[vcodec!=none][acodec!=none]'
             )
             ext = 'mp4'
 
