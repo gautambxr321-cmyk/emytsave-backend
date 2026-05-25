@@ -110,9 +110,10 @@ def get_info():
                 fmt_url = f.get('url', '')
                 protocol = f.get('protocol', '')
 
-                if not fmt_url or protocol in ('m3u8', 'm3u8_native', 'dash'):
+                if not fmt_url:
                     continue
 
+                # Include all formats with video+audio combined
                 if vcodec != 'none' and acodec != 'none' and height and height not in seen_heights:
                     seen_heights.add(height)
                     formats.append({
@@ -121,6 +122,7 @@ def get_info():
                         "ext": f.get('ext', 'mp4'),
                         "filesize": f.get('filesize') or f.get('filesize_approx')
                     })
+                # Best audio only
                 elif vcodec == 'none' and acodec != 'none' and not any(x['quality'] == 'audio' for x in formats):
                     formats.append({
                         "format_id": f.get('format_id'),
